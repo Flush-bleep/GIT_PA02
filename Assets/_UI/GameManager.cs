@@ -11,12 +11,16 @@ public class GameManager : MonoBehaviour
     public static int Lives = 3;
     public static int Score = 0;
 
+    private HUD theHUD;
+
     void Start()
     {
         Lives = 3;
         Score = 0;
         Time.timeScale = 0;
         CurrentState = GameState.GameIdle;
+
+        theHUD = FindObjectOfType<HUD>();
     }
     
     void Update()
@@ -32,5 +36,24 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+
+        if (Lives == 0)
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
+
+
+    public void TakeDamage(int LiveToReduce)
+    {
+        Lives -= LiveToReduce;
+        theHUD.UpdateLives();
+    }
+
+    public void AddScore(int ScoreToGive)
+    {
+        Score += ScoreToGive;
+        theHUD.UpdateScore();
+    }
+
 }

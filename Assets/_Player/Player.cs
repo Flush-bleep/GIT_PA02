@@ -13,13 +13,18 @@ public class Player : MonoBehaviour
     private Transform playerMesh = null;
     private Animator thisAnimator = null;
 
+    private GameManager theGameManger;
+
     private float moveSpeed = 0.05f;
+
+    public GameObject boom;
 
     void Start()
     {
         thisController = GetComponent<CharacterController>();
         thisAnimator = GetComponentInChildren<Animator>();
         playerMesh = transform.GetChild(0);
+        theGameManger = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -54,4 +59,22 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.5f, 1.5f), transform.position.y, transform.position.z);
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Bad")
+        {
+            print("ahhhh");
+            theGameManger.TakeDamage(1);
+            GameObject boom2 = Instantiate(boom, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            Destroy(boom2, 1);
+        }
+
+        if (other.tag == "Points")
+        {
+            theGameManger.AddScore(1);
+        }
+
+
+    }
 }
